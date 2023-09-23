@@ -1,4 +1,4 @@
-name: Build All
+name: Build Main branch
 
 on:
   push:
