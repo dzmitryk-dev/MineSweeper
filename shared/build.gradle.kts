@@ -26,15 +26,6 @@ kotlin {
                 api("androidx.core:core-ktx:1.10.1")
             }
         }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
         val desktopMain by getting {
             dependencies {
                 implementation(compose.desktop.common)
@@ -62,3 +53,4 @@ android {
         jvmToolchain(17)
     }
 }
+
