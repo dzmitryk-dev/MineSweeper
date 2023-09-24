@@ -1,9 +1,9 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
+import ui.App
+import ui.StubHello
 
-actual fun getPlatformName(): String = "Desktop"
-
-@Composable fun MainView() = App()
+@Composable fun MainView() = StubHello()
 
 @Preview
 @Composable

@@ -1,5 +1,4 @@
 import androidx.compose.runtime.Composable
+import ui.StubHello
 
-actual fun getPlatformName(): String = "Android"
-
-@Composable fun MainView() = App()
+@Composable fun MainView() = StubHello()
