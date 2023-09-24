@@ -7,15 +7,24 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults.elevation
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import model.GameState
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @Composable
-fun App() {
+fun Game(
+    gameState: State<GameState>
+) {
+    val time = remember { mutableStateOf(0L) }
+    val state = remember { gameState }
+
     Column(
         Modifier.fillMaxSize().background(color = Color.Gray).padding(all = 8.dp),
     ) {
@@ -25,7 +34,7 @@ fun App() {
                     .padding(4.dp)
                     .weight(weight = 1.0f)
                     .align(Alignment.CenterVertically),
-                text = "000",
+                text = String.format("%03d", state.value.flagsCount),
                 textAlign = TextAlign.Center,
                 color = Color.Red
             )
@@ -39,12 +48,19 @@ fun App() {
                     .padding(4.dp)
                     .weight(weight = 1.0f, fill = true)
                     .align(Alignment.CenterVertically),
-                text = "000",
+                text = String.format("%03d", time.value),
                 textAlign = TextAlign.Center,
                 color = Color.Red
             )
         }
         Field(9, 9)
+    }
+
+    LaunchedEffect("Time") {
+        while (gameState.value.isActive) {
+            delay(1.toDuration(DurationUnit.SECONDS))
+            time.value += 1
+        }
     }
 }
 
@@ -65,5 +81,4 @@ fun Field(width: Int, height: Int) {
             }
         }
     }
-
 }

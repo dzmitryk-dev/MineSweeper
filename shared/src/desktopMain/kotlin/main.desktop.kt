@@ -1,12 +1,16 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
-import ui.App
-import ui.StubHello
+import androidx.compose.runtime.collectAsState
+import kotlinx.coroutines.flow.flowOf
+import model.GameMode
+import model.GameModelImpl
+import model.GameState
+import ui.Game
 
-@Composable fun MainView() = StubHello()
+@Composable fun MainView() = Game(GameModelImpl(GameMode.Beginner).gameState.collectAsState())
 
 @Preview
 @Composable
 fun AppPreview() {
-    App()
+    Game(flowOf(GameState.EMPTY).collectAsState(GameState.EMPTY))
 }
