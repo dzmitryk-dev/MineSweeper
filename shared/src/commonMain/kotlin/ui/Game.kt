@@ -1,11 +1,15 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults.elevation
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,13 +18,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import model.Cell
 import model.GameState
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 @Composable
 fun Game(
-    gameState: State<GameState>
+    gameState: State<GameState>,
+    onClick: (Int, Int) -> Unit,
+    onLongClick: (Int, Int) -> Unit
 ) {
     val time = remember { mutableStateOf(0L) }
     val state = remember { gameState }
@@ -53,7 +60,7 @@ fun Game(
                 color = Color.Red
             )
         }
-        Field(9, 9)
+        Field(gameState.value.gameField, onClick, onLongClick)
     }
 
     LaunchedEffect("Time") {
@@ -64,18 +71,65 @@ fun Game(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Field(width: Int, height: Int) {
-    Column(modifier = Modifier.fillMaxSize().background(color = Color.LightGray)) {
-        for (x in 0 until width) {
+fun Field(
+    field: List<List<Cell>>,
+    onClick: (Int, Int) -> Unit,
+    onLongClick: (Int, Int) -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize().background(color = Color.Gray)) {
+        for ((x, row) in field.withIndex()) {
             Row(modifier = Modifier.fillMaxWidth().weight(weight = 1.0f)) {
-                for (y in 0 until height) {
-                    Button(
-                        modifier = Modifier.weight(weight = 1.0f).fillMaxHeight().padding(1.dp), onClick = { },
-                        elevation = elevation(),
-                        border = BorderStroke(width = 2.dp, color = MaterialTheme.colors.primaryVariant)
+                for ((y, e) in row.withIndex()) {
+                    Box(
+                        Modifier.weight(weight = 1.0f)
+                            .fillMaxHeight()
+                            .padding(1.dp)
+                            .align(Alignment.CenterVertically)
+                            .background(color = Color.LightGray)
                     ) {
-                        Text("${y + 1}")
+                        when (e.state) {
+                            Cell.CellState.CLOSED -> Surface(
+                                modifier = Modifier.fillMaxSize().combinedClickable(
+                                    onClick = { onClick(x, y) },
+                                    onLongClick = { onLongClick(x, y) }
+                                ),
+                                color = MaterialTheme.colors.primary,
+                                border = BorderStroke(
+                                    width = 2.dp,
+                                    color = MaterialTheme.colors.primaryVariant
+                                )
+                            ) { }
+
+                            Cell.CellState.FLAGGED -> Text(
+                                modifier = Modifier,
+                                text = "F"
+                            )
+
+                            Cell.CellState.OPEN -> when (e.value) {
+                                Cell.CellValue.Empty -> Spacer(
+                                    modifier = Modifier.fillMaxSize()
+                                        .background(Color.Yellow)
+                                )
+
+                                Cell.CellValue.Mine -> Text(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .align(Alignment.Center)
+                                        .background(Color.Green),
+                                    text = "M",
+                                    textAlign = TextAlign.Center
+                                )
+
+                                is Cell.CellValue.Value -> Text(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .background(Color.Red)
+                                        .align(Alignment.Center),
+                                    text = "${e.value.number}",
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                     }
                 }
             }

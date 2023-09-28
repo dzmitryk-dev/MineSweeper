@@ -87,7 +87,7 @@ fun generateGameField(gameMode: GameMode, random: Random = Random.Default): List
     return (0 until gameMode.fieldHeight).map { x ->
         (0 until gameMode.fieldWidth).map { y ->
             val p = createPoint(x, y)
-            Cell(state = Cell.CellState.OPEN,
+            Cell(state = Cell.CellState.CLOSED,
                 value = if (p in minesCords) {
                     Cell.CellValue.Mine
                 } else {

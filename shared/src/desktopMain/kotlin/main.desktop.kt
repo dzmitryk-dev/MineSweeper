@@ -1,16 +1,19 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import kotlinx.coroutines.flow.flowOf
 import model.GameMode
 import model.GameModelImpl
-import model.GameState
 import ui.Game
+import kotlin.random.Random
 
-@Composable fun MainView() = Game(GameModelImpl(GameMode.Beginner).gameState.collectAsState())
+@Composable fun MainView() {
+    val gameModel = GameModelImpl(GameMode.Beginner)
+    Game(gameModel.gameState.collectAsState(), gameModel::cellClicked, gameModel::cellMarked)
+}
 
 @Preview
 @Composable
 fun AppPreview() {
-    Game(flowOf(GameState.EMPTY).collectAsState(GameState.EMPTY))
+    Game(
+        GameModelImpl(GameMode.Beginner, Random(42)).gameState.collectAsState(), { _,_ -> }, { _, _ ->})
 }
