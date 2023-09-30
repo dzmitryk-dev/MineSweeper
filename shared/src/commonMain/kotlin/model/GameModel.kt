@@ -4,6 +4,7 @@ import currentTimeMillis
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 interface GameModel {
@@ -22,7 +23,7 @@ class GameModelImpl(
         GameState(
             isActive = false,
             gameField = generateGameField(gameMode, random),
-            flagsCount = 40
+            flagsCount = getMinesCount(gameMode)
         )
     )
 
@@ -30,7 +31,9 @@ class GameModelImpl(
         get() = _mutableGameStateFlow
 
     override fun cellClicked(x: Int, y: Int) {
-        TODO("Not yet implemented")
+        _mutableGameStateFlow.update { oldState ->
+            openCell(oldState, x, y)
+        }
     }
 
     override fun cellMarked(x: Int, y: Int) {

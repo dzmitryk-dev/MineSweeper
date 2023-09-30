@@ -102,3 +102,15 @@ fun generateGameField(gameMode: GameMode, random: Random = Random.Default): List
         }
     }
 }
+
+fun getMinesCount(gameMode: GameMode): Int =
+    when(gameMode) {
+        GameMode.Beginner -> 10
+        GameMode.Expert -> 40
+        GameMode.Intermediate -> 99
+        is GameMode.Custom -> gameMode.minesCount
+    }
+
+fun openCell(gameState: GameState, x: Int, y: Int): GameState {
+    return gameState
+}
