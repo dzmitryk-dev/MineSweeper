@@ -122,14 +122,12 @@ fun Field(
                                         .background(Color.Yellow)
                                 )
 
-                                Cell.CellValue.Mine -> Text(
-                                    modifier = Modifier.fillMaxWidth()
-                                        .align(Alignment.Center)
-                                        .background(Color.Green),
-                                    text = "M",
-                                    textAlign = TextAlign.Center
-                                )
-
+                                Cell.CellValue.Mine -> Image(
+                                        modifier = Modifier.fillMaxWidth()
+                                            .align(Alignment.Center),
+                                        painter = painterResource("bomb.xml"),
+                                        contentDescription = null
+                                    )
                                 is Cell.CellValue.Value -> Text(
                                     modifier = Modifier.fillMaxWidth()
                                         .background(Color.Red)
