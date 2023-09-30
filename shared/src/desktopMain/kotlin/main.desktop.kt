@@ -15,5 +15,6 @@ import kotlin.random.Random
 @Composable
 fun AppPreview() {
     Game(
-        GameModelImpl(GameMode.Beginner, Random(42)).gameState.collectAsState(), { _,_ -> }, { _, _ ->})
+        GameModelImpl(GameMode.Beginner, Random(42)).gameState.collectAsState(), { _,_ -> }, { _, _ ->}
+    )
 }

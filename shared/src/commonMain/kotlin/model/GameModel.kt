@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
 interface GameModel {
-    val gameState: Flow<GameState>
+    val gameState: StateFlow<GameState>
 
     fun cellClicked(x: Int, y: Int)
     fun cellMarked(x: Int, y: Int)
