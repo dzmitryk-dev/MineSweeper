@@ -4,18 +4,9 @@ import kotlin.random.Random
 
 data class GameState(
     val isActive: Boolean,
-    val gameField: List<List<Cell>>,
+    val gameField: GameField,
     val flagsCount: Int,
-) {
-    companion object {
-        @JvmStatic
-        val EMPTY = GameState(
-            isActive = false,
-            gameField = emptyList(),
-            flagsCount = 0
-        )
-    }
-}
+)
 
 data class Cell(
     val state: CellState,
@@ -27,11 +18,11 @@ data class Cell(
         data object Empty : CellValue()
         data class Value(val number: Int) : CellValue()
     }
+
     enum class CellState {
         CLOSED, FLAGGED, OPEN
     }
 }
-
 
 
 /**
@@ -54,6 +45,7 @@ sealed class GameMode(open val fieldWidth: Int, open val fieldHeight: Int, open 
 }
 
 typealias Point = Pair<Int, Int>
+
 val Point.x
     get() = this.first
 val Point.y
@@ -63,8 +55,8 @@ internal fun createPoint(x: Int, y: Int): Point = Pair(x, y)
 
 internal fun calculateMinesAround(p: Point, minesCords: Set<Point>): Int {
     val pointsToCheck = buildSet {
-        (p.x-1..p.x+1).forEach { x ->
-            (p.y-1..p.y+1).forEach { y ->
+        (p.x - 1..p.x + 1).forEach { x ->
+            (p.y - 1..p.y + 1).forEach { y ->
                 if (!(x == p.x && y == p.y)) {
                     add(createPoint(x, y))
                 }
@@ -74,7 +66,26 @@ internal fun calculateMinesAround(p: Point, minesCords: Set<Point>): Int {
     return pointsToCheck.count { it in minesCords }
 }
 
-fun generateGameField(gameMode: GameMode, random: Random = Random.Default): List<List<Cell>> {
+/**
+ * This class wraps and encapsulates all operations with game field collection under the hood
+ */
+data class GameField internal constructor(
+    private val _field: MutableList<MutableList<Cell>>
+): List<List<Cell>> by _field {
+    fun updateCell(row: Int, column: Int, updateFunc: (Cell) -> Cell) {
+        val oldValue = _field[row][column]
+        val newValue = updateFunc(oldValue)
+        _field[row][column] = newValue
+    }
+
+    companion object {
+        @JvmStatic
+        fun createGameField(collection: List<List<Cell>>): GameField =
+            GameField(collection.map { it.toMutableList() }.toMutableList())
+    }
+}
+
+fun generateGameField(gameMode: GameMode, random: Random = Random.Default): GameField {
     val minesCords = buildSet {
         while (size < gameMode.minesCount) {
             createPoint(
@@ -87,7 +98,8 @@ fun generateGameField(gameMode: GameMode, random: Random = Random.Default): List
     return (0 until gameMode.fieldHeight).map { x ->
         (0 until gameMode.fieldWidth).map { y ->
             val p = createPoint(x, y)
-            Cell(state = Cell.CellState.CLOSED,
+            Cell(
+                state = Cell.CellState.CLOSED,
                 value = if (p in minesCords) {
                     Cell.CellValue.Mine
                 } else {
@@ -100,11 +112,11 @@ fun generateGameField(gameMode: GameMode, random: Random = Random.Default): List
                 }
             )
         }
-    }
+    }.let { GameField.createGameField(it) }
 }
 
 fun getMinesCount(gameMode: GameMode): Int =
-    when(gameMode) {
+    when (gameMode) {
         GameMode.Beginner -> 10
         GameMode.Expert -> 40
         GameMode.Intermediate -> 99
@@ -112,5 +124,6 @@ fun getMinesCount(gameMode: GameMode): Int =
     }
 
 fun openCell(gameState: GameState, x: Int, y: Int): GameState {
+    gameState.gameField
     return gameState
 }

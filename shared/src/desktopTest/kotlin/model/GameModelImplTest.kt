@@ -15,23 +15,23 @@ class GameModelImplTest {
         val expected = GameState(
             isActive = false,
             gameField = buildList {
-                add(listOf(
+                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
                 ))
-                add(listOf(
+                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                 ))
-                add(listOf(
+                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 ))
-
-            },
+            }.toMutableList()
+            .let { GameField(it) },
             flagsCount = 2
         )
 
