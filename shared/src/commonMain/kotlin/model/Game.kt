@@ -1,5 +1,7 @@
 package model
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.random.Random
 
 data class GameState(
@@ -70,18 +72,24 @@ internal fun calculateMinesAround(p: Point, minesCords: Set<Point>): Int {
  * This class wraps and encapsulates all operations with game field collection under the hood
  */
 data class GameField internal constructor(
-    private val _field: MutableList<MutableList<Cell>>
+    private val _field: ImmutableList<ImmutableList<Cell>>
 ): List<List<Cell>> by _field {
-    fun updateCell(row: Int, column: Int, updateFunc: (Cell) -> Cell) {
+    fun updateCell(row: Int, column: Int, updateFunc: (Cell) -> Cell): GameField {
         val oldValue = _field[row][column]
         val newValue = updateFunc(oldValue)
-        _field[row][column] = newValue
+
+         val newField = _field.toMutableList().apply {
+             this[row] = this[row].toMutableList().apply {
+                this[column] = newValue
+            }.toImmutableList()
+        }
+        return createGameField(newField)
     }
 
     companion object {
         @JvmStatic
         fun createGameField(collection: List<List<Cell>>): GameField =
-            GameField(collection.map { it.toMutableList() }.toMutableList())
+            GameField(collection.map { it.toImmutableList() }.toImmutableList())
     }
 }
 
@@ -124,18 +132,26 @@ fun getMinesCount(gameMode: GameMode): Int =
     }
 
 fun openCell(gameState: GameState, x: Int, y: Int): GameState {
-    gameState.gameField
-    return gameState
+    return gameState.run {
+        copy(gameField = gameField.updateCell(x, y) { cell ->
+            val newState = when(cell.state) {
+                Cell.CellState.CLOSED -> Cell.CellState.OPEN
+                Cell.CellState.OPEN -> Cell.CellState.CLOSED
+                else -> throw IllegalStateException("We try to mark cell in ${cell.state}")
+            }
+            cell.copy(state = newState)
+        })
+    }
 }
 
 fun markCell(gameState: GameState, x: Int, y: Int): GameState =
-    gameState.apply {
-        gameField.updateCell(x, y) { cell ->
+    gameState.run {
+        copy(gameField = gameField.updateCell(x, y) { cell ->
             val newState = when(cell.state) {
                 Cell.CellState.CLOSED -> Cell.CellState.FLAGGED
                 Cell.CellState.FLAGGED -> Cell.CellState.CLOSED
                 else -> throw IllegalStateException("We try to mark cell in ${cell.state}")
             }
             cell.copy(state = newState)
-        }
+        })
     }

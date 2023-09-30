@@ -3,6 +3,7 @@ package model
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertNotEquals
 
 class MarkCellTest {
 
@@ -27,9 +28,17 @@ class MarkCellTest {
     }
 
     @Test
-    fun should_not_happes() {
+    fun should_not_happens() {
         val testGameState = generateTestGameField(Cell.CellState.OPEN)
         assertFails { markCell(testGameState, 0, 0) }
+    }
+
+    @Test
+    fun should_create_new_state_object() {
+        val testGameState = generateTestGameField(Cell.CellState.CLOSED)
+        val newGameState = markCell(testGameState, 0, 0)
+
+        assertNotEquals(testGameState, newGameState)
     }
 
     private fun generateTestGameField(stateToTest: Cell.CellState): GameState =

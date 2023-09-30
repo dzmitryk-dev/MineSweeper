@@ -4,6 +4,7 @@ import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class GenerateGameFieldTest {
 
@@ -51,6 +52,33 @@ class GenerateGameFieldTest {
         }
 
         assertContentEquals(expected, mappedResult)
+    }
+
+    @Test
+    fun testGameFieldUpdate() {
+        val testGameField = GameField.createGameField(listOf(listOf(Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty))))
+
+        val newGameField = testGameField.updateCell(0 ,0 ) { cell ->
+            cell.copy(state = Cell.CellState.OPEN)
+        }
+
+        assertNotEquals(testGameField, newGameField, "$testGameField and $newGameField")
+    }
+
+    @Test
+    fun shouldBeEqual() {
+        val field1 = GameField.createGameField(listOf(listOf(Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty))))
+        val field2 = GameField.createGameField(listOf(listOf(Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty))))
+
+        assertEquals(field1, field2)
+    }
+
+    @Test
+    fun shouldNotBeEqual() {
+        val field1 = GameField.createGameField(listOf(listOf(Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty))))
+        val field2 = GameField.createGameField(listOf(listOf(Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty))))
+
+        assertNotEquals(field1, field2)
     }
 
 }

@@ -32,7 +32,7 @@ class GameModelImplTest {
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 ))
             }.toMutableList()
-            .let { GameField(it) },
+            .let { GameField.createGameField(it) },
             flagsCount = 2
         )
 
@@ -68,7 +68,7 @@ class GameModelImplTest {
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 ))
             }.toMutableList()
-                .let { GameField(it) },
+                .let { GameField.createGameField(it) },
             flagsCount = 2
         )
 
