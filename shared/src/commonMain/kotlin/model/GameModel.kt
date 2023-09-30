@@ -1,7 +1,6 @@
 package model
 
 import currentTimeMillis
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -21,7 +20,7 @@ class GameModelImpl(
 
     private val _mutableGameStateFlow = MutableStateFlow(
         GameState(
-            isActive = false,
+            gameStatus = GameState.GameStatus.NOT_STARTED,
             gameField = generateGameField(gameMode, random),
             flagsCount = getMinesCount(gameMode)
         )
@@ -31,10 +30,10 @@ class GameModelImpl(
         get() = _mutableGameStateFlow
 
     override fun cellClicked(x: Int, y: Int) {
-        _mutableGameStateFlow.update { oldState -> openCell(oldState, x, y) }
+        _mutableGameStateFlow.update { oldState -> checkGameState(openCell(oldState, x, y)) }
     }
 
     override fun cellMarked(x: Int, y: Int) {
-        _mutableGameStateFlow.update { oldState -> markCell(oldState, x, y) }
+        _mutableGameStateFlow.update { oldState -> checkGameState(markCell(oldState, x, y)) }
     }
 }

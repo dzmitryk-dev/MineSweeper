@@ -62,8 +62,8 @@ fun Game(
         Field(gameState.value.gameField, onClick, onLongClick)
     }
 
-    LaunchedEffect("Time") {
-        while (gameState.value.isActive) {
+    LaunchedEffect(gameState.value.gameStatus) {
+        while (gameState.value.gameStatus == GameState.GameStatus.IN_PROGRESS) {
             delay(1.toDuration(DurationUnit.SECONDS))
             time.value += 1
         }

@@ -5,10 +5,15 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlin.random.Random
 
 data class GameState(
-    val isActive: Boolean,
+    val gameStatus: GameStatus,
     val gameField: GameField,
     val flagsCount: Int,
-)
+) {
+    enum class GameStatus {
+        NOT_STARTED, IN_PROGRESS, GAME_OVER
+    }
+
+}
 
 data class Cell(
     val state: CellState,
@@ -154,3 +159,12 @@ fun markCell(gameState: GameState, x: Int, y: Int): GameState =
             cell.copy(state = newState)
         })
     }
+
+
+fun checkGameState(gameState: GameState): GameState {
+    return if (gameState.gameStatus == GameState.GameStatus.NOT_STARTED) {
+        gameState.copy(gameStatus = GameState.GameStatus.IN_PROGRESS)
+    } else {
+        gameState
+    }
+}

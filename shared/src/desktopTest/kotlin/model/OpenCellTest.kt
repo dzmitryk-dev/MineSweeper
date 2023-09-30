@@ -1,6 +1,5 @@
 package model
 
-import javax.swing.plaf.nimbus.State
 import kotlin.test.Test
 import kotlin.test.assertNotEquals
 
@@ -9,7 +8,7 @@ class OpenCellTest {
     @Test
     fun should_generte_new_state_object() {
         val testState = GameState(
-            isActive = false,
+            gameStatus = GameState.GameStatus.NOT_STARTED,
             flagsCount = 10,
             gameField = GameField.createGameField(
                 listOf(listOf(Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine)))

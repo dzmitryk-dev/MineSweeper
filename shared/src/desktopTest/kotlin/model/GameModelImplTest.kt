@@ -14,7 +14,7 @@ class GameModelImplTest {
         val actual = gameMode.gameState.value
 
         val expected = GameState(
-            isActive = false,
+            gameStatus = GameState.GameStatus.NOT_STARTED,
             gameField = buildList {
                 add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
@@ -50,7 +50,7 @@ class GameModelImplTest {
         val actual = gameMode.gameState.value
 
         val expected = GameState(
-            isActive = false,
+            gameStatus = GameState.GameStatus.IN_PROGRESS,
             gameField = buildList {
                 add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),

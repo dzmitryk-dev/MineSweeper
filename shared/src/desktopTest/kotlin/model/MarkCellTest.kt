@@ -43,7 +43,7 @@ class MarkCellTest {
 
     private fun generateTestGameField(stateToTest: Cell.CellState): GameState =
         GameState(
-            isActive = false,
+            gameStatus = GameState.GameStatus.NOT_STARTED,
             flagsCount = 10,
             gameField = GameField.createGameField(
                 listOf(listOf(Cell(state = stateToTest, value = Cell.CellValue.Mine)))
