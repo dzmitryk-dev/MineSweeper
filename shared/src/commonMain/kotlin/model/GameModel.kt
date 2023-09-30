@@ -35,6 +35,6 @@ class GameModelImpl(
     }
 
     override fun cellMarked(x: Int, y: Int) {
-        TODO("Not yet implemented")
+        _mutableGameStateFlow.update { oldState -> markCell(oldState, x, y) }
     }
 }

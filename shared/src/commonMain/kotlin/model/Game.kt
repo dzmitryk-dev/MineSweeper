@@ -127,3 +127,15 @@ fun openCell(gameState: GameState, x: Int, y: Int): GameState {
     gameState.gameField
     return gameState
 }
+
+fun markCell(gameState: GameState, x: Int, y: Int): GameState =
+    gameState.apply {
+        gameField.updateCell(x, y) { cell ->
+            val newState = when(cell.state) {
+                Cell.CellState.CLOSED -> Cell.CellState.FLAGGED
+                Cell.CellState.FLAGGED -> Cell.CellState.CLOSED
+                else -> throw IllegalStateException("We try to mark cell in ${cell.state}")
+            }
+            cell.copy(state = newState)
+        }
+    }
