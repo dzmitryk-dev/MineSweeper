@@ -135,9 +135,8 @@ fun openCell(gameState: GameState, x: Int, y: Int): GameState {
     return gameState.run {
         copy(gameField = gameField.updateCell(x, y) { cell ->
             val newState = when(cell.state) {
-                Cell.CellState.CLOSED -> Cell.CellState.OPEN
                 Cell.CellState.OPEN -> Cell.CellState.CLOSED
-                else -> throw IllegalStateException("We try to mark cell in ${cell.state}")
+                else -> Cell.CellState.OPEN
             }
             cell.copy(state = newState)
         })

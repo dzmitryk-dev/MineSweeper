@@ -2,10 +2,7 @@
 
 package ui
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -20,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import model.Cell
 import model.GameState
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -71,7 +70,7 @@ fun Game(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalResourceApi::class)
 @Composable
 fun Field(
     field: List<List<Cell>>,
@@ -101,12 +100,22 @@ fun Field(
                                     color = MaterialTheme.colors.primaryVariant
                                 )
                             ) { }
-
-                            Cell.CellState.FLAGGED -> Text(
-                                modifier = Modifier,
-                                text = "F"
-                            )
-
+                            Cell.CellState.FLAGGED -> Surface(
+                                modifier = Modifier.fillMaxSize().combinedClickable(
+                                    onClick = { onClick(x, y) },
+                                    onLongClick = { onLongClick(x, y) }
+                                ),
+                                color = MaterialTheme.colors.primary,
+                                border = BorderStroke(
+                                    width = 2.dp,
+                                    color = MaterialTheme.colors.primaryVariant
+                                )
+                            ) {
+                                Image(
+                                    painterResource("flag.xml"),
+                                    null
+                                )
+                            }
                             Cell.CellState.OPEN -> when (e.value) {
                                 Cell.CellValue.Empty -> Spacer(
                                     modifier = Modifier.fillMaxSize()
