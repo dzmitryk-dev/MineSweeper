@@ -74,8 +74,8 @@ fun Game(
 @Composable
 fun Field(
     field: List<List<Cell>>,
-    onClick: (Int, Int) -> Unit,
-    onLongClick: (Int, Int) -> Unit
+    onPrimaryClick: (Int, Int) -> Unit,
+    onSecondaryClick: (Int, Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().background(color = Color.Gray)) {
         for ((x, row) in field.withIndex()) {
@@ -90,10 +90,9 @@ fun Field(
                     ) {
                         when (e.state) {
                             Cell.CellState.CLOSED -> Surface(
-                                modifier = Modifier.fillMaxSize().combinedClickable(
-                                    onClick = { onClick(x, y) },
-                                    onLongClick = { onLongClick(x, y) }
-                                ),
+                                modifier = Modifier.fillMaxSize().setupClickListeners(
+                                    onPrimaryClick = { onPrimaryClick(x, y) },
+                                    onSecondaryClick = { onSecondaryClick(x, y) }),
                                 color = MaterialTheme.colors.primary,
                                 border = BorderStroke(
                                     width = 2.dp,
@@ -101,10 +100,9 @@ fun Field(
                                 )
                             ) { }
                             Cell.CellState.FLAGGED -> Surface(
-                                modifier = Modifier.fillMaxSize().combinedClickable(
-                                    onClick = { onClick(x, y) },
-                                    onLongClick = { onLongClick(x, y) }
-                                ),
+                                modifier = Modifier.fillMaxSize().setupClickListeners(
+                                    onPrimaryClick = { onPrimaryClick(x, y) },
+                                    onSecondaryClick = { onSecondaryClick(x, y) }),
                                 color = MaterialTheme.colors.primary,
                                 border = BorderStroke(
                                     width = 2.dp,
@@ -121,7 +119,6 @@ fun Field(
                                     modifier = Modifier.fillMaxSize()
                                         .background(Color.Yellow)
                                 )
-
                                 Cell.CellValue.Mine -> Image(
                                         modifier = Modifier.fillMaxWidth()
                                             .align(Alignment.Center),
@@ -143,3 +140,8 @@ fun Field(
         }
     }
 }
+
+expect fun Modifier.setupClickListeners(
+    onPrimaryClick: () -> Unit,
+    onSecondaryClick: () -> Unit
+): Modifier
