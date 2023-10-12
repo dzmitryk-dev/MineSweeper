@@ -91,6 +91,16 @@ data class GameField internal constructor(
         return createGameField(newField)
     }
 
+    fun updateCell(points: List<Point>, updateFunc: (Cell) -> Cell): GameField {
+        val fieldCopy = _field.map {
+            it.toMutableList()
+        }.toMutableList()
+
+        points.forEach { (row, column) -> fieldCopy[row][column] = updateFunc(fieldCopy[row][column]) }
+
+        return createGameField(fieldCopy)
+    }
+
     companion object {
         @JvmStatic
         fun createGameField(collection: List<List<Cell>>): GameField =
@@ -137,15 +147,17 @@ fun getMinesCount(gameMode: GameMode): Int =
     }
 
 fun openCell(gameState: GameState, x: Int, y: Int): GameState {
-    return gameState.run {
-        copy(gameField = gameField.updateCell(x, y) { cell ->
-            val newState = when (cell.state) {
-                Cell.CellState.OPEN -> Cell.CellState.CLOSED
-                else -> Cell.CellState.OPEN
+    val cell = gameState.gameField[x][y]
+    return gameState.copy(
+        gameStatus = gameState.gameStatus.let {
+            if (cell.value == Cell.CellValue.Mine) {
+                GameState.GameStatus.GAME_OVER
+            } else {
+                GameState.GameStatus.IN_PROGRESS
             }
-            cell.copy(state = newState)
-        })
-    }
+        },
+        gameField = gameState.gameField.updateCell(x, y) { it.copy(state = Cell.CellState.OPEN) }
+    )
 }
 
 fun markCell(gameState: GameState, x: Int, y: Int): GameState =

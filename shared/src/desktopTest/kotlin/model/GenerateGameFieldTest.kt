@@ -66,6 +66,29 @@ class GenerateGameFieldTest {
     }
 
     @Test
+    fun testGameFiledUpdates2() {
+        val testGameField = GameField.createGameField(
+            listOf(
+                listOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty)
+                )
+            )
+        )
+
+        val newGameField = testGameField.updateCell(
+            listOf(
+                createPoint(0, 0),
+                createPoint(0, 1),
+                createPoint(0, 2)
+            )
+        ) { cell -> cell.copy(state = Cell.CellState.OPEN) }
+
+        assertNotEquals(testGameField, newGameField, "$testGameField and $newGameField")
+    }
+
+    @Test
     fun shouldBeEqual() {
         val field1 = GameField.createGameField(listOf(listOf(Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty))))
         val field2 = GameField.createGameField(listOf(listOf(Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty))))
