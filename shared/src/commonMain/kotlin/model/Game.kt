@@ -225,7 +225,16 @@ internal fun checkGameState(gameState: GameState): GameState {
     val isGameOver = initialState.gameField.flatten().any { cell -> cell.isOpen && cell.isMine }
 
     return if (isGameOver) {
-        initialState.copy(gameStatus = GameState.GameStatus.GAME_OVER)
+        initialState.copy(
+            gameStatus = GameState.GameStatus.GAME_OVER,
+            gameField = GameField.createGameField(initialState.gameField.map {
+                it.map { c ->
+                    if (c.isMine) {
+                        c.copy(state = Cell.CellState.OPEN)
+                    } else c
+                }
+            })
+        )
     } else {
         initialState
     }

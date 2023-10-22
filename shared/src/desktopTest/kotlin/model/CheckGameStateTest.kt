@@ -40,4 +40,49 @@ class CheckGameStateTest {
 
         assertEquals(GameState.GameStatus.GAME_OVER, newState.gameStatus)
     }
+
+    @Test
+    fun should_open_all_mines_if_mine_is_opened() {
+        val newState = checkGameState(GameState(
+            gameStatus = GameState.GameStatus.IN_PROGRESS,
+            gameField = GameField.createGameField(
+                listOf(
+                    listOf(
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    ),
+                    listOf(
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(1)),
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(2)),
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(1)),
+                    ),
+                    listOf(
+                        Cell(Cell.CellState.OPEN, Cell.CellValue.Mine),
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(2)),
+                        Cell(Cell.CellState.CLOSED, Cell.CellValue.Mine),
+                    ),
+                )
+            ),
+            flagsCount = 2
+        ))
+
+        assertEquals(listOf(
+            listOf(
+                Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(1)),
+                Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(2)),
+                Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(1)),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Mine),
+                Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(2)),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Mine),
+            ),
+        ), newState.gameField)
+    }
 }
