@@ -30,7 +30,7 @@ class OpenCellTest {
                 listOf(
                     listOf(
                         Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
-                        Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
+                        Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1), isClicked = true),
                         Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty)
                     )
                 )
@@ -48,7 +48,7 @@ class OpenCellTest {
             gameField = GameField.createGameField(
                 listOf(
                     listOf(
-                        Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                        Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine, isClicked = true),
                         Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                         Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty)
                     )
@@ -80,7 +80,7 @@ class OpenCellTest {
             listOf(
                 listOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
-                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1)),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1), isClicked = true),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty)
                 )
             ), newState.gameField
@@ -134,7 +134,7 @@ class OpenCellTest {
                 listOf(
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty)
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty, isClicked = true)
                 )
             ), newState.gameField
         )

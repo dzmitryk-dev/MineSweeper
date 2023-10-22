@@ -143,7 +143,7 @@ class GameFieldTest {
         // Assert that the cell is now open
         assertEquals(listOf(
             listOf(
-                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty, isClicked = true),
                 Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
                 Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
             ),
@@ -194,7 +194,7 @@ class GameFieldTest {
             ),
             listOf(
                 Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(1)),
-                Cell(Cell.CellState.OPEN, Cell.CellValue.Value(2)),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Value(2), isClicked = true),
                 Cell(Cell.CellState.CLOSED, Cell.CellValue.Value(1)),
             ),
             listOf(

@@ -90,10 +90,8 @@ fun Field(
 ) {
     Column(modifier = Modifier.fillMaxSize().background(color = Color.Gray)) {
         for ((x, row) in field.withIndex()) {
-            val elementHeight = remember { mutableStateOf(0.dp) }
             Row(
-                modifier = Modifier.fillMaxWidth().weight(weight = 1.0f)
-                    .onSizeChanged { size -> elementHeight.value = size.height.dp }) {
+                modifier = Modifier.fillMaxWidth().weight(weight = 1.0f)) {
                 for ((y, e) in row.withIndex()) {
                     Box(
                         Modifier.weight(weight = 1.0f)
@@ -137,21 +135,27 @@ fun Field(
                                 )
 
                                 Cell.CellValue.Mine -> Image(
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier.fillMaxSize()
                                         .align(Alignment.Center)
-                                        .background(color = Color.DarkGray),
+                                        .run {
+                                            if (e.isClicked) {
+                                                this.background(color = Color.Red)
+                                            } else {
+                                                this
+                                            }
+                                        },
                                     painter = painterResource("bomb.xml"),
                                     contentDescription = null
                                 )
 
                                 is Cell.CellValue.Value -> Text(
                                     modifier = Modifier.fillMaxWidth()
-//                                        .background(Color.Red)
                                         .align(Alignment.Center),
                                     text = "${e.value.number}",
                                     textAlign = TextAlign.Center,
                                     maxLines = 1,
-                                    fontSize = (elementHeight.value - 8.dp).dpToSp()
+                                    // Hardcode fo now because the previous way with calculation it in runtime does not work in Android
+                                    fontSize = 24.sp
                                 )
                             }
                         }

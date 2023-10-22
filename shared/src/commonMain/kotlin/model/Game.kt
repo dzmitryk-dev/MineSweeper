@@ -19,7 +19,8 @@ data class GameState(
 
 data class Cell(
     val state: CellState,
-    val value: CellValue
+    val value: CellValue,
+    val isClicked: Boolean = false
 ) {
 
     val isOpen: Boolean
@@ -113,9 +114,10 @@ data class GameField internal constructor(
     fun openCell(x: Int, y: Int): GameField {
         return updateField {
             val cell = this[x][y]
+            this[x][y] = cell.copy(isClicked = true)
             if (cell.value != Cell.CellValue.Empty) {
-                this[x][y] = cell.copy(state =  Cell.CellState.OPEN)
-            } else {
+                this[x][y] = this[x][y].copy(state = Cell.CellState.OPEN)
+            } else  {
                 tailrec fun openAllAffectedCells(
                     field: MutableList<MutableList<Cell>>,
                     points: Set<Point>
@@ -124,7 +126,7 @@ data class GameField internal constructor(
                     points.forEach { (x, y) ->
                         val c = field[x][y]
                         if (!c.isOpen) {
-                            field[x][y] = c.copy(state =  Cell.CellState.OPEN)
+                            field[x][y] = c.copy(state = Cell.CellState.OPEN)
                             if (c.value == Cell.CellValue.Empty) {
                                 (max(y-1,0)..min(y+1, field.lastIndex)).flatMap { y1 ->
                                     (max(x-1, 0)..min(x+1, field[y1].lastIndex)).map { x1 ->
@@ -193,17 +195,8 @@ fun getMinesCount(gameMode: GameMode): Int =
     }
 
 fun openCell(gameState: GameState, x: Int, y: Int): GameState {
-    val cell = gameState.gameField[x][y]
-    val newGameState = gameState.gameStatus.let {
-        if (cell.value == Cell.CellValue.Mine) {
-            GameState.GameStatus.GAME_OVER
-        } else {
-            GameState.GameStatus.IN_PROGRESS
-        }
-    }
     val newGameField = gameState.gameField.openCell(x, y)
     return gameState.copy(
-        gameStatus = newGameState,
         gameField = newGameField
     ).let { checkGameState(it) }
 }
