@@ -48,12 +48,15 @@ fun Game(
             )
             Spacer(modifier = Modifier.weight(2.0f))
             Button(modifier = Modifier, onClick = onRestart) {
-                Text(text = when(gameState.value.gameStatus) {
-                    GameState.GameStatus.NOT_STARTED -> ":|"
-                    GameState.GameStatus.IN_PROGRESS -> ":)"
-                    GameState.GameStatus.GAME_OVER -> ":("
-                    GameState.GameStatus.WIN -> "BD"
-                })
+                Text(
+                    text = when (gameState.value.gameStatus) {
+                        GameState.GameStatus.NOT_STARTED -> "\uD83D\uDE10"
+                        GameState.GameStatus.IN_PROGRESS -> "\uD83D\uDE42"
+                        GameState.GameStatus.GAME_OVER -> "\uD83D\uDE2D"
+                        GameState.GameStatus.WIN -> "\uD83D\uDE0E"
+                    },
+                    fontSize = 24.sp
+                )
             }
             Spacer(modifier = Modifier.weight(2.0f))
             Text(
