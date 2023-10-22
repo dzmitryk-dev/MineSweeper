@@ -12,8 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import dpToSp
 import kotlinx.coroutines.delay
 import model.Cell
 import model.GameState
@@ -55,6 +61,7 @@ fun Game(
                     .weight(weight = 1.0f, fill = true)
                     .align(Alignment.CenterVertically),
                 text = String.format("%03d", time.value),
+                maxLines = 1,
                 textAlign = TextAlign.Center,
                 color = Color.Red
             )
@@ -79,7 +86,10 @@ fun Field(
 ) {
     Column(modifier = Modifier.fillMaxSize().background(color = Color.Gray)) {
         for ((x, row) in field.withIndex()) {
-            Row(modifier = Modifier.fillMaxWidth().weight(weight = 1.0f)) {
+            val elementHeight = remember { mutableStateOf(0.dp) }
+            Row(
+                modifier = Modifier.fillMaxWidth().weight(weight = 1.0f)
+                    .onSizeChanged { size -> elementHeight.value = size.height.dp }) {
                 for ((y, e) in row.withIndex()) {
                     Box(
                         Modifier.weight(weight = 1.0f)
@@ -99,6 +109,7 @@ fun Field(
                                     color = MaterialTheme.colors.primaryVariant
                                 )
                             ) { }
+
                             Cell.CellState.FLAGGED -> Surface(
                                 modifier = Modifier.fillMaxSize().setupClickListeners(
                                     onPrimaryClick = { onPrimaryClick(x, y) },
@@ -114,23 +125,28 @@ fun Field(
                                     null
                                 )
                             }
+
                             Cell.CellState.OPEN -> when (e.value) {
                                 Cell.CellValue.Empty -> Spacer(
                                     modifier = Modifier.fillMaxSize()
                                         .background(Color.Yellow)
                                 )
+
                                 Cell.CellValue.Mine -> Image(
-                                        modifier = Modifier.fillMaxWidth()
-                                            .align(Alignment.Center),
-                                        painter = painterResource("bomb.xml"),
-                                        contentDescription = null
-                                    )
+                                    modifier = Modifier.fillMaxWidth()
+                                        .align(Alignment.Center),
+                                    painter = painterResource("bomb.xml"),
+                                    contentDescription = null
+                                )
+
                                 is Cell.CellValue.Value -> Text(
                                     modifier = Modifier.fillMaxWidth()
-                                        .background(Color.Red)
+//                                        .background(Color.Red)
                                         .align(Alignment.Center),
                                     text = "${e.value.number}",
-                                    textAlign = TextAlign.Center
+                                    textAlign = TextAlign.Center,
+                                    maxLines = 1,
+                                    fontSize = (elementHeight.value - 8.dp).dpToSp()
                                 )
                             }
                         }
