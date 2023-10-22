@@ -30,10 +30,10 @@ class GameModelImpl(
         get() = _mutableGameStateFlow
 
     override fun cellClicked(x: Int, y: Int) {
-        _mutableGameStateFlow.update { oldState -> checkGameState(openCell(oldState, x, y)) }
+        _mutableGameStateFlow.update { oldState -> openCell(oldState, x, y) }
     }
 
     override fun cellMarked(x: Int, y: Int) {
-        _mutableGameStateFlow.update { oldState -> checkGameState(markCell(oldState, x, y)) }
+        _mutableGameStateFlow.update { oldState -> markCell(oldState, x, y) }
     }
 }

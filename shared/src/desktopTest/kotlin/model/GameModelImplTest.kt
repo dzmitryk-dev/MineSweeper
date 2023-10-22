@@ -7,11 +7,11 @@ import kotlin.test.assertEquals
 
 class GameModelImplTest {
 
-    private val gameMode = GameModelImpl(gameMode = GameMode.Custom(3, 3, 2), Random(42L))
+    private val gameModel = GameModelImpl(gameMode = GameMode.Custom(3, 3, 2), Random(42L))
 
     @Test
     fun getGameState() = runTest {
-        val actual = gameMode.gameState.value
+        val actual = gameModel.gameState.value
 
         val expected = GameState(
             gameStatus = GameState.GameStatus.NOT_STARTED,
@@ -45,9 +45,9 @@ class GameModelImplTest {
 
     @Test
     fun cellMarked() {
-        gameMode.cellMarked(1, 1)
+        gameModel.cellMarked(1, 1)
 
-        val actual = gameMode.gameState.value
+        val actual = gameModel.gameState.value
 
         val expected = GameState(
             gameStatus = GameState.GameStatus.IN_PROGRESS,
@@ -67,8 +67,7 @@ class GameModelImplTest {
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 ))
-            }.toMutableList()
-                .let { GameField.createGameField(it) },
+            }.toMutableList().let { GameField.createGameField(it) },
             flagsCount = 2
         )
 

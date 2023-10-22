@@ -2,6 +2,8 @@ package model
 
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.random.Random
 
 data class GameState(
@@ -79,26 +81,60 @@ internal fun calculateMinesAround(p: Point, minesCords: Set<Point>): Int {
 data class GameField internal constructor(
     private val _field: ImmutableList<ImmutableList<Cell>>
 ) : List<List<Cell>> by _field {
-    fun updateCell(row: Int, column: Int, updateFunc: (Cell) -> Cell): GameField {
-        val oldValue = _field[row][column]
-        val newValue = updateFunc(oldValue)
 
-        val newField = _field.toMutableList().apply {
-            this[row] = this[row].toMutableList().apply {
-                this[column] = newValue
-            }.toImmutableList()
-        }
-        return createGameField(newField)
-    }
-
-    fun updateCell(points: List<Point>, updateFunc: (Cell) -> Cell): GameField {
-        val fieldCopy = _field.map {
+    internal fun updateField(updateFunc: MutableList<MutableList<Cell>>.() -> Unit): GameField {
+        val mutableField = _field.map {
             it.toMutableList()
         }.toMutableList()
 
-        points.forEach { (row, column) -> fieldCopy[row][column] = updateFunc(fieldCopy[row][column]) }
+        mutableField.updateFunc()
 
-        return createGameField(fieldCopy)
+        return createGameField(mutableField)
+    }
+
+    fun markCell(x: Int, y: Int): GameField {
+        return updateField {
+            val cell = this[x][y]
+            val newState = when (cell.state) {
+                Cell.CellState.CLOSED -> Cell.CellState.FLAGGED
+                Cell.CellState.FLAGGED -> Cell.CellState.CLOSED
+                else -> throw IllegalStateException("We try to mark cell in ${cell.state}")
+            }
+            this[x][y] = cell.copy(state = newState)
+        }
+    }
+
+    fun openCell(x: Int, y: Int): GameField {
+        return updateField {
+            val cell = this[x][y]
+            if (cell.value != Cell.CellValue.Empty) {
+                this[x][y] = cell.copy(state =  Cell.CellState.OPEN)
+            } else {
+                tailrec fun openAllAffectedCells(
+                    field: MutableList<MutableList<Cell>>,
+                    points: Set<Point>
+                ) {
+                    val newPoints = mutableSetOf<Point>()
+                    points.forEach { (x, y) ->
+                        val c = field[x][y]
+                        if (c.state != Cell.CellState.OPEN) {
+                            field[x][y] = c.copy(state =  Cell.CellState.OPEN)
+                            if (c.value == Cell.CellValue.Empty) {
+                                (max(y-1,0)..min(y+1, field.lastIndex)).flatMap { y1 ->
+                                    (max(x-1, 0)..min(x+1, field[y1].lastIndex)).map { x1 ->
+                                        createPoint(x1, y1)
+                                    }
+                                }.filterNot { (x1, y1) -> x1 == x && y1 == y }
+                                .toSet().let { newPoints.addAll(it) }
+                            }
+                        }
+                    }
+                    if (newPoints.isEmpty()) return
+                    openAllAffectedCells(field, newPoints)
+                }
+                openAllAffectedCells(this, setOf(createPoint(x, y)))
+            }
+        }
     }
 
     companion object {
@@ -118,8 +154,12 @@ fun generateGameField(gameMode: GameMode, random: Random = Random.Default): Game
         }
     }
 
-    return (0 until gameMode.fieldHeight).map { x ->
-        (0 until gameMode.fieldWidth).map { y ->
+    return generateGameFieldInternal(minesCords, gameMode.fieldWidth, gameMode.fieldHeight)
+}
+
+internal fun generateGameFieldInternal(minesCords: Set<Point>, fieldWidth: Int, fieldHeight: Int): GameField {
+    return (0 until fieldHeight).map { x ->
+        (0 until fieldWidth).map { y ->
             val p = createPoint(x, y)
             Cell(
                 state = Cell.CellState.CLOSED,
@@ -148,32 +188,27 @@ fun getMinesCount(gameMode: GameMode): Int =
 
 fun openCell(gameState: GameState, x: Int, y: Int): GameState {
     val cell = gameState.gameField[x][y]
+    val newGameState = gameState.gameStatus.let {
+        if (cell.value == Cell.CellValue.Mine) {
+            GameState.GameStatus.GAME_OVER
+        } else {
+            GameState.GameStatus.IN_PROGRESS
+        }
+    }
+    val newGameField = gameState.gameField.openCell(x, y)
     return gameState.copy(
-        gameStatus = gameState.gameStatus.let {
-            if (cell.value == Cell.CellValue.Mine) {
-                GameState.GameStatus.GAME_OVER
-            } else {
-                GameState.GameStatus.IN_PROGRESS
-            }
-        },
-        gameField = gameState.gameField.updateCell(x, y) { it.copy(state = Cell.CellState.OPEN) }
-    )
+        gameStatus = newGameState,
+        gameField = newGameField
+    ).let { checkGameState(it) }
 }
 
 fun markCell(gameState: GameState, x: Int, y: Int): GameState =
     gameState.run {
-        copy(gameField = gameField.updateCell(x, y) { cell ->
-            val newState = when (cell.state) {
-                Cell.CellState.CLOSED -> Cell.CellState.FLAGGED
-                Cell.CellState.FLAGGED -> Cell.CellState.CLOSED
-                else -> throw IllegalStateException("We try to mark cell in ${cell.state}")
-            }
-            cell.copy(state = newState)
-        })
-    }
+        copy(gameField = gameField.markCell(x, y))
+    }.let { checkGameState(it) }
 
 
-fun checkGameState(gameState: GameState): GameState {
+internal fun checkGameState(gameState: GameState): GameState {
     return if (gameState.gameStatus == GameState.GameStatus.NOT_STARTED) {
         gameState.copy(gameStatus = GameState.GameStatus.IN_PROGRESS)
     } else {
