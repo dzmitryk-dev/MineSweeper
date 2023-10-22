@@ -4,6 +4,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class GameModelImplTest {
 
@@ -41,6 +42,95 @@ class GameModelImplTest {
 
     @Test
     fun cellClicked() {
+        gameModel.cellClicked(1, 1)
+
+        val actual = gameModel.gameState.value
+
+        val expected = GameState(
+            gameStatus = GameState.GameStatus.IN_PROGRESS,
+            gameField = buildList {
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(2), isClicked = true),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                ))
+            }.toMutableList().let { GameField.createGameField(it) },
+            flagsCount = 2
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun cellClicked2() {
+        gameModel.cellClicked(0, 0)
+
+        val actual = gameModel.gameState.value
+
+        val expected = GameState(
+            gameStatus = GameState.GameStatus.IN_PROGRESS,
+            gameField = buildList {
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty, isClicked = true),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1)),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(2)),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1)),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                ))
+            }.toMutableList().let { GameField.createGameField(it) },
+            flagsCount = 2
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun cellClicked3() {
+        gameModel.cellClicked(2, 2)
+
+        val actual = gameModel.gameState.value
+
+        val expected = GameState(
+            gameStatus = GameState.GameStatus.GAME_OVER,
+            gameField = buildList {
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Mine),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Mine, isClicked = true),
+                ))
+            }.toMutableList().let { GameField.createGameField(it) },
+            flagsCount = 2
+        )
+
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -72,5 +162,16 @@ class GameModelImplTest {
         )
 
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun restart() {
+        val initialState = gameModel.gameState.value
+
+        gameModel.restart()
+
+        val newState = gameModel.gameState.value
+
+        assertNotEquals(initialState, newState)
     }
 }

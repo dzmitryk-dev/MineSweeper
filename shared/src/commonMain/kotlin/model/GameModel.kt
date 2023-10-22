@@ -11,11 +11,12 @@ interface GameModel {
 
     fun cellClicked(x: Int, y: Int)
     fun cellMarked(x: Int, y: Int)
+    fun restart()
 }
 
 class GameModelImpl(
-    gameMode: GameMode,
-    random: Random = Random(currentTimeMillis())
+    private val gameMode: GameMode,
+    private val random: Random = Random(currentTimeMillis())
 ) : GameModel {
 
     private val _mutableGameStateFlow = MutableStateFlow(
@@ -35,5 +36,15 @@ class GameModelImpl(
 
     override fun cellMarked(x: Int, y: Int) {
         _mutableGameStateFlow.update { oldState -> markCell(oldState, x, y) }
+    }
+
+    override fun restart() {
+        _mutableGameStateFlow.update {
+            GameState(
+                gameStatus = GameState.GameStatus.NOT_STARTED,
+                gameField = generateGameField(gameMode, random),
+                flagsCount = getMinesCount(gameMode)
+            )
+        }
     }
 }

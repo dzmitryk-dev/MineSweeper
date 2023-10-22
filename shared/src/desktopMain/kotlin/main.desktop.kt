@@ -8,13 +8,20 @@ import ui.Game
 import kotlin.random.Random
 
 @Composable fun MainView(gameModel: GameModel) {
-    Game(gameModel.gameState.collectAsState(), gameModel::cellClicked, gameModel::cellMarked)
+    Game(
+        gameState = gameModel.gameState.collectAsState(),
+        onClick = gameModel::cellClicked,
+        onLongClick = gameModel::cellMarked,
+        onRestart = gameModel::restart)
 }
 
 @Preview
 @Composable
 fun AppPreview() {
     Game(
-        GameModelImpl(GameMode.Beginner, Random(42)).gameState.collectAsState(), { _,_ -> }, { _, _ ->}
+        gameState = GameModelImpl(GameMode.Beginner, Random(42)).gameState.collectAsState(),
+        onClick = { _,_ -> },
+        onLongClick = { _, _ -> },
+        onRestart = { }
     )
 }

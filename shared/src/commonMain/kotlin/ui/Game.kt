@@ -12,14 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dpToSp
 import kotlinx.coroutines.delay
 import model.Cell
 import model.GameState
@@ -31,6 +26,7 @@ import kotlin.time.toDuration
 @Composable
 fun Game(
     gameState: State<GameState>,
+    onRestart: () -> Unit,
     onClick: (Int, Int) -> Unit,
     onLongClick: (Int, Int) -> Unit
 ) {
@@ -51,9 +47,9 @@ fun Game(
                 color = Color.Red
             )
             Spacer(modifier = Modifier.weight(2.0f))
-            Button(modifier = Modifier, onClick = { }) {
+            Button(modifier = Modifier, onClick = onRestart) {
                 Text(text = when(gameState.value.gameStatus) {
-                    GameState.GameStatus.NOT_STARTED -> "?"
+                    GameState.GameStatus.NOT_STARTED -> ":|"
                     GameState.GameStatus.IN_PROGRESS -> ":)"
                     GameState.GameStatus.GAME_OVER -> ":("
                 })

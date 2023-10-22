@@ -7,5 +7,6 @@ import ui.Game
     Game(
         gameState = gameModel.gameState.collectAsState(),
         onClick = gameModel::cellClicked,
-        onLongClick = gameModel::cellMarked
+        onLongClick = gameModel::cellMarked,
+        onRestart = gameModel::restart
     )
