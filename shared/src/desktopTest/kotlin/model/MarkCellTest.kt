@@ -48,7 +48,7 @@ class MarkCellTest {
             gameStatus = GameState.GameStatus.NOT_STARTED,
             flagsCount = flagsCount,
             gameField = GameField.createGameField(
-                listOf(listOf(Cell(state = stateToTest, value = Cell.CellValue.Mine)))
+                listOf(listOf(Cell(state = stateToTest, value = Cell.CellValue.Empty)))
             )
         )
 

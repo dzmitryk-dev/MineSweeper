@@ -12,7 +12,7 @@ data class GameState(
     val flagsCount: Int,
 ) {
     enum class GameStatus {
-        NOT_STARTED, IN_PROGRESS, GAME_OVER
+        NOT_STARTED, IN_PROGRESS, GAME_OVER, WIN
     }
 
 }
@@ -240,6 +240,23 @@ internal fun checkGameState(gameState: GameState): GameState {
             })
         )
     } else {
-        initialState
+        val onlyBombsAreLeft = initialState.gameField.flatten().filter { !it.isOpen }.all { it.isMine }
+        if (onlyBombsAreLeft) {
+            initialState.copy(
+                gameStatus = GameState.GameStatus.WIN,
+                gameField = GameField.createGameField(initialState.gameField.map {
+                    it.map { c ->
+                        if (c.isMine) {
+                            c.copy(state = Cell.CellState.FLAGGED)
+                        } else {
+                            c
+                        }
+                    }
+                }),
+                flagsCount = 0
+            )
+        } else {
+            initialState
+        }
     }
 }

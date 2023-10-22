@@ -118,11 +118,12 @@ class OpenCellTest {
             )
         )
         val newState = openCell(testState, 2, 2)
-        assertEquals(GameState.GameStatus.IN_PROGRESS, newState.gameStatus)
+        assertEquals(GameState.GameStatus.WIN, newState.gameStatus)
+        assertEquals(0, newState.flagsCount)
         assertContentEquals(
             listOf(
                 listOf(
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                    Cell(state = Cell.CellState.FLAGGED, value = Cell.CellValue.Mine),
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty)
                 ),

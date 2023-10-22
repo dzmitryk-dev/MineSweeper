@@ -141,24 +141,24 @@ class GameModelImplTest {
 
         val expected = GameState(
             gameStatus = GameState.GameStatus.IN_PROGRESS,
-            gameField = buildList {
-                add(mutableListOf(
+            gameField = listOf(
+                listOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                ))
-                add(mutableListOf(
+                ),
+                listOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.FLAGGED, value = Cell.CellValue.Value(2)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                ))
-                add(mutableListOf(
+                ),
+                listOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
-                ))
-            }.toMutableList().let { GameField.createGameField(it) },
-            flagsCount = 2
+                )
+            ).let { GameField.createGameField(it) },
+            flagsCount = 1
         )
 
         assertEquals(expected, actual)

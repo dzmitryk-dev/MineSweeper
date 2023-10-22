@@ -52,6 +52,7 @@ fun Game(
                     GameState.GameStatus.NOT_STARTED -> ":|"
                     GameState.GameStatus.IN_PROGRESS -> ":)"
                     GameState.GameStatus.GAME_OVER -> ":("
+                    GameState.GameStatus.WIN -> "BD"
                 })
             }
             Spacer(modifier = Modifier.weight(2.0f))
