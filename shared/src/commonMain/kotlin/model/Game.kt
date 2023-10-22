@@ -203,7 +203,18 @@ fun openCell(gameState: GameState, x: Int, y: Int): GameState {
 
 fun markCell(gameState: GameState, x: Int, y: Int): GameState =
     gameState.run {
-        copy(gameField = gameField.markCell(x, y))
+        val cell = gameState.gameField[x][y]
+        if ((this.flagsCount > 0) or (cell.state == Cell.CellState.FLAGGED)) {
+            val newGameField = gameField.markCell(x, y)
+            val flagsCount = gameState.flagsCount - if(cell.state == Cell.CellState.FLAGGED) {
+                -1
+            } else {
+                1
+            }
+            copy(gameField = newGameField, flagsCount = flagsCount)
+        } else {
+            this
+        }
     }.let { checkGameState(it) }
 
 

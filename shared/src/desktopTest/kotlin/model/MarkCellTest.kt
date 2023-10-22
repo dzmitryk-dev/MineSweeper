@@ -9,22 +9,24 @@ class MarkCellTest {
 
     @Test
     fun should_update_state_to_flagged() {
-        val testGameState = generateTestGameField(Cell.CellState.CLOSED)
-        val expected = generateTestGameField(Cell.CellState.FLAGGED)
+        val testGameState = generateTestGameField(Cell.CellState.CLOSED, flagsCount = 1)
+        val expected = generateTestGameField(Cell.CellState.FLAGGED, flagsCount = 0)
 
         val newGameState = markCell(testGameState, 0, 0)
 
         assertEquals(expected.gameField, newGameState.gameField)
+        assertEquals(expected.flagsCount, newGameState.flagsCount)
     }
 
     @Test
     fun should_update_state_to_closed() {
-        val testGameState = generateTestGameField(Cell.CellState.FLAGGED)
-        val expected = generateTestGameField(Cell.CellState.CLOSED)
+        val testGameState = generateTestGameField(Cell.CellState.FLAGGED, flagsCount = 0)
+        val expected = generateTestGameField(Cell.CellState.CLOSED, flagsCount = 1)
 
         val newGameState = markCell(testGameState, 0, 0)
 
         assertEquals(expected.gameField, newGameState.gameField)
+        assertEquals(expected.flagsCount, newGameState.flagsCount)
     }
 
     @Test
@@ -41,10 +43,10 @@ class MarkCellTest {
         assertNotEquals(testGameState, newGameState)
     }
 
-    private fun generateTestGameField(stateToTest: Cell.CellState): GameState =
+    private fun generateTestGameField(stateToTest: Cell.CellState, flagsCount: Int = 1): GameState =
         GameState(
             gameStatus = GameState.GameStatus.NOT_STARTED,
-            flagsCount = 10,
+            flagsCount = flagsCount,
             gameField = GameField.createGameField(
                 listOf(listOf(Cell(state = stateToTest, value = Cell.CellValue.Mine)))
             )
