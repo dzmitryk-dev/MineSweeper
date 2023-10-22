@@ -22,6 +22,12 @@ data class Cell(
     val value: CellValue
 ) {
 
+    val isOpen: Boolean
+        get() = state == CellState.OPEN
+
+    val isMine: Boolean
+        get() = value == CellValue.Mine
+
     sealed class CellValue {
         data object Mine : CellValue()
         data object Empty : CellValue()
@@ -117,7 +123,7 @@ data class GameField internal constructor(
                     val newPoints = mutableSetOf<Point>()
                     points.forEach { (x, y) ->
                         val c = field[x][y]
-                        if (c.state != Cell.CellState.OPEN) {
+                        if (!c.isOpen) {
                             field[x][y] = c.copy(state =  Cell.CellState.OPEN)
                             if (c.value == Cell.CellValue.Empty) {
                                 (max(y-1,0)..min(y+1, field.lastIndex)).flatMap { y1 ->
@@ -209,9 +215,18 @@ fun markCell(gameState: GameState, x: Int, y: Int): GameState =
 
 
 internal fun checkGameState(gameState: GameState): GameState {
-    return if (gameState.gameStatus == GameState.GameStatus.NOT_STARTED) {
+    val initialState = if (gameState.gameStatus == GameState.GameStatus.NOT_STARTED) {
         gameState.copy(gameStatus = GameState.GameStatus.IN_PROGRESS)
     } else {
         gameState
+    }
+
+    // Game is over if mine is opened
+    val isGameOver = initialState.gameField.flatten().any { cell -> cell.isOpen && cell.isMine }
+
+    return if (isGameOver) {
+        initialState.copy(gameStatus = GameState.GameStatus.GAME_OVER)
+    } else {
+        initialState
     }
 }

@@ -23,4 +23,21 @@ class CheckGameStateTest {
 
         assertEquals(GameState.GameStatus.IN_PROGRESS, newState.gameStatus)
     }
+
+    @Test
+    fun should_over_game_if_mine_opened() {
+        val newState = checkGameState(GameState(
+            gameStatus = GameState.GameStatus.IN_PROGRESS,
+            gameField = GameField.createGameField(
+                listOf(listOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Mine)
+                ))
+            ),
+            flagsCount = 1
+        ))
+
+        assertEquals(GameState.GameStatus.GAME_OVER, newState.gameStatus)
+    }
 }

@@ -52,7 +52,11 @@ fun Game(
             )
             Spacer(modifier = Modifier.weight(2.0f))
             Button(modifier = Modifier, onClick = { }) {
-                Text(text = ":)")
+                Text(text = when(gameState.value.gameStatus) {
+                    GameState.GameStatus.NOT_STARTED -> "?"
+                    GameState.GameStatus.IN_PROGRESS -> ":)"
+                    GameState.GameStatus.GAME_OVER -> ":("
+                })
             }
             Spacer(modifier = Modifier.weight(2.0f))
             Text(
@@ -134,7 +138,8 @@ fun Field(
 
                                 Cell.CellValue.Mine -> Image(
                                     modifier = Modifier.fillMaxWidth()
-                                        .align(Alignment.Center),
+                                        .align(Alignment.Center)
+                                        .background(color = Color.DarkGray),
                                     painter = painterResource("bomb.xml"),
                                     contentDescription = null
                                 )
