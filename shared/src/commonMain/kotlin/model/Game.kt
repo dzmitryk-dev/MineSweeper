@@ -128,8 +128,8 @@ data class GameField internal constructor(
                         if (!c.isOpen) {
                             field[x][y] = c.copy(state = Cell.CellState.OPEN)
                             if (c.value == Cell.CellValue.Empty) {
-                                (max(y-1,0)..min(y+1, field.lastIndex)).flatMap { y1 ->
-                                    (max(x-1, 0)..min(x+1, field[y1].lastIndex)).map { x1 ->
+                                (max(x-1,0)..min(x+1, field.lastIndex)).flatMap { x1 ->
+                                    (max(y-1, 0)..min(y+1, field[x1].lastIndex)).map { y1 ->
                                         createPoint(x1, y1)
                                     }
                                 }.filterNot { (x1, y1) -> x1 == x && y1 == y }
@@ -166,8 +166,8 @@ fun generateGameField(gameMode: GameMode, random: Random = Random.Default): Game
 }
 
 internal fun generateGameFieldInternal(minesCords: Set<Point>, fieldWidth: Int, fieldHeight: Int): GameField {
-    return (0 until fieldHeight).map { x ->
-        (0 until fieldWidth).map { y ->
+    return (0 until fieldHeight).map { y ->
+        (0 until fieldWidth).map { x ->
             val p = createPoint(x, y)
             Cell(
                 state = Cell.CellState.CLOSED,

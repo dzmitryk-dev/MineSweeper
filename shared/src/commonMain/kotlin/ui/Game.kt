@@ -12,7 +12,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -93,12 +96,14 @@ fun Field(
             Row(
                 modifier = Modifier.fillMaxWidth().weight(weight = 1.0f)) {
                 for ((y, e) in row.withIndex()) {
+                    val boxSize = remember { mutableStateOf(IntSize.Zero) }
                     Box(
                         Modifier.weight(weight = 1.0f)
                             .fillMaxHeight()
                             .padding(1.dp)
                             .align(Alignment.CenterVertically)
                             .background(color = Color.LightGray)
+                            .onSizeChanged { size -> boxSize.value = size }
                     ) {
                         when (e.state) {
                             Cell.CellState.CLOSED -> Surface(
@@ -155,7 +160,7 @@ fun Field(
                                     textAlign = TextAlign.Center,
                                     maxLines = 1,
                                     // Hardcode fo now because the previous way with calculation it in runtime does not work in Android
-                                    fontSize = 24.sp
+                                    fontSize = calculateFontSize(boxSize.value)
                                 )
                             }
                         }
@@ -170,3 +175,5 @@ expect fun Modifier.setupClickListeners(
     onPrimaryClick: () -> Unit,
     onSecondaryClick: () -> Unit
 ): Modifier
+
+expect fun calculateFontSize(elementSize: IntSize): TextUnit

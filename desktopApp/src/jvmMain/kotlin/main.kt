@@ -5,7 +5,7 @@ import model.GameModelImpl
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
-        val gameModel = GameModelImpl(GameMode.Beginner)
+        val gameModel = GameModelImpl(GameMode.Expert)
         MainView(gameModel)
     }
 }
