@@ -3,4 +3,10 @@
 
 # Minesweeper
 
-Sample project written by me to practice Jetpack Compose skill + KMM. Based on [Compose Multiplatform Template](https://github.com/JetBrains/compose-multiplatform-template) project.
+Multiplatform implementation of Mineseeper game. Currently support Android + Desktop.
+
+This is the sample project written by me to practice Jetpack Compose skill + KMM. Based on [Compose Multiplatform Template](https://github.com/JetBrains/compose-multiplatform-template) project.
+
+![image](https://github.com/dzkoirn/MineSweeper/assets/25884414/487901f0-5937-471b-a0ca-49fb0b139f0c)
+![image](https://github.com/dzkoirn/MineSweeper/assets/25884414/a1f03bef-ddf1-4b2a-8e02-1f0b77fa009a)
+
