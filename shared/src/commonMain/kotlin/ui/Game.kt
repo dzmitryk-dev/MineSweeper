@@ -13,7 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -176,4 +178,9 @@ expect fun Modifier.setupClickListeners(
     onSecondaryClick: () -> Unit
 ): Modifier
 
-expect fun calculateFontSize(elementSize: IntSize): TextUnit
+@Composable
+private fun calculateFontSize(elementSize: IntSize): TextUnit {
+    return with(LocalDensity.current) {
+        (elementSize.height.toDp() - 4.dp).toSp()
+    }
+}

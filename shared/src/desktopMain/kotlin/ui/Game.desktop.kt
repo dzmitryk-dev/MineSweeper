@@ -21,7 +21,3 @@ actual fun Modifier.setupClickListeners(
         matcher = PointerMatcher.mouse(PointerButton.Secondary),
         onClick = onSecondaryClick
     )
-
-actual fun calculateFontSize(elementSize: IntSize): TextUnit {
-    return (elementSize.height.dp - 2.dp).value.sp
-}
