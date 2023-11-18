@@ -19,17 +19,17 @@ class GameModelImplTest {
             gameField = buildList {
                 add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 ))
             }.toMutableList()
@@ -51,17 +51,17 @@ class GameModelImplTest {
             gameField = buildList {
                 add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(2), isClicked = true),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(2), isClicked = true),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 ))
             }.toMutableList().let { GameField.createGameField(it) },
@@ -82,17 +82,17 @@ class GameModelImplTest {
             gameField = buildList {
                 add(mutableListOf(
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty, isClicked = true),
-                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1)),
-                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(2)),
-                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1)),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(2)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 ))
             }.toMutableList().let { GameField.createGameField(it) },
@@ -113,17 +113,18 @@ class GameModelImplTest {
             gameField = buildList {
                 add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                ))
-                add(mutableListOf(
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Mine),
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+
+                ))
+                add(mutableListOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.OPEN, value = Cell.CellValue.Mine, isClicked = true),
                 ))
             }.toMutableList().let { GameField.createGameField(it) },
@@ -144,17 +145,18 @@ class GameModelImplTest {
             gameField = listOf(
                 listOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
-                ),
-                listOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                    Cell(state = Cell.CellState.FLAGGED, value = Cell.CellValue.Value(2)),
-                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
-                ),
-                listOf(
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
+                ),
+                listOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.FLAGGED, value = Cell.CellValue.Value(2)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(2)),
+
+                ),
+                listOf(
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Empty),
+                    Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Value(1)),
                     Cell(state = Cell.CellState.CLOSED, value = Cell.CellValue.Mine),
                 )
             ).let { GameField.createGameField(it) },

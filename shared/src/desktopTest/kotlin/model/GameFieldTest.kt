@@ -29,9 +29,9 @@ class GameFieldTest {
 
 
         val expected: List<List<String>> = buildList {
-            add(listOf("0", "0", "0"))
-            add(listOf("1", "2", "1"))
-            add(listOf("M", "2", "M"))
+            add(listOf("0", "1", "M"))
+            add(listOf("0", "2", "2"))
+            add(listOf("0", "1", "M"))
         }
 
         assertContentEquals(expected, mappedResult)
@@ -205,4 +205,194 @@ class GameFieldTest {
         ), updatedField)
     }
 
+    @Test
+    fun testOpenFullyEmptyField() {
+        val initialField = GameField.createGameField(
+            listOf(
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+            )
+        )
+
+        // Perform the action
+        val updatedField = initialField.openCell(0, 0)
+
+        // Assert that the cell is now open
+        assertEquals(listOf(
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty, isClicked = true),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+        ), updatedField)
+    }
+
+    @Test
+    fun testOpenFullyEmptyNonSquereField() {
+        val initialField = GameField.createGameField(
+            listOf(
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+            )
+        )
+
+        // Perform the action
+        val updatedField = initialField.openCell(0, 0)
+
+        // Assert that the cell is now open
+        assertEquals(listOf(
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty, isClicked = true),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+        ), updatedField)
+    }
+
+    @Test
+    fun testOpenFullyEmptyNonSquereField2() {
+        val initialField = GameField.createGameField(
+            listOf(
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+                listOf(
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                    Cell(Cell.CellState.CLOSED, Cell.CellValue.Empty),
+                ),
+            )
+        )
+
+        // Perform the action
+        val updatedField = initialField.openCell(0, 0)
+
+        // Assert that the cell is now open
+        assertEquals(listOf(
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty, isClicked = true),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+            listOf(
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+                Cell(Cell.CellState.OPEN, Cell.CellValue.Empty),
+            ),
+        ), updatedField)
+    }
 }
