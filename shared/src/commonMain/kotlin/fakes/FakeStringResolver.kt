@@ -5,7 +5,7 @@ import StrResId
 /**
  * Simple hardcoded strings for development purposes.
  */
-internal class FakeStringResolver {
+object FakeStringResolver {
     fun resolveString(strResId: StrResId): String {
         return when(strResId) {
             StrResId.Beginner -> "Beginner"

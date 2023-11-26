@@ -6,5 +6,6 @@ import ui.Start
 @Preview
 @Composable
 internal fun StartPreview() {
-    Start(FakeStringResolver()::resolveString) { }
+    Start(FakeStringResolver::resolveString) { }
 }
+
