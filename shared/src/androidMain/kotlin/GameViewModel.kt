@@ -19,7 +19,7 @@ class GameViewModel(
                 modelClass: Class<T>,
             ): T {
                 return GameViewModel(
-                    GameModelImpl(GameMode.Beginner, Random(currentTimeMillis()))
+                    GameModelImpl(GameMode.Expert, Random(currentTimeMillis()))
                 ) as T
             }
         }
