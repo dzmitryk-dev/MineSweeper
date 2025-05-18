@@ -1,6 +1,6 @@
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import fakes.FakeStringResolver
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.Start
 
 @Preview

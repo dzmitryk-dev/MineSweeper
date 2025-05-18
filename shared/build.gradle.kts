@@ -1,13 +1,18 @@
+@file:OptIn(ExperimentalWasmDsl::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
-    id("org.jetbrains.compose")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
     androidTarget()
-
     jvm("desktop")
+//    wasmJs()
 
     sourceSets {
         val commonMain by getting {
@@ -17,7 +22,8 @@ kotlin {
                 implementation(compose.material)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+                implementation(compose.components.uiToolingPreview)
+                implementation(libs.kotlinx.collections.immutable)
             }
         }
         val commonTest by getting {
@@ -27,10 +33,9 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                api("androidx.activity:activity-compose:1.8.1")
-                api("androidx.appcompat:appcompat:1.6.1")
-                api("androidx.core:core-ktx:1.12.0")
-                api("androidx.compose.ui:ui-tooling-preview-android:1.5.4")
+                api(libs.androidx.activity.compose)
+                api(libs.androidx.appcompat)
+                api(libs.androidx.core.ktx)
             }
         }
         val desktopMain by getting {
@@ -41,7 +46,7 @@ kotlin {
         val desktopTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+                implementation(libs.kotlin.coroutines.test)
             }
         }
     }
@@ -66,5 +71,3 @@ android {
         jvmToolchain(17)
     }
 }
-
-

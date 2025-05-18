@@ -15,11 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinproject.shared.generated.resources.Res
+import kotlinproject.shared.generated.resources.bomb
+import kotlinproject.shared.generated.resources.flag
 import kotlinx.coroutines.delay
 import model.Cell
 import model.GameState
@@ -130,7 +132,7 @@ fun Field(
                                 )
                             ) {
                                 Image(
-                                    painterResource("flag.xml"),
+                                    painterResource(Res.drawable.flag),
                                     null
                                 )
                             }
@@ -151,7 +153,7 @@ fun Field(
                                                 this
                                             }
                                         },
-                                    painter = painterResource("bomb.xml"),
+                                    painter = painterResource(Res.drawable.bomb),
                                     contentDescription = null
                                 )
 
